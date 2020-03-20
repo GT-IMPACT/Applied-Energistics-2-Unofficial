@@ -7,15 +7,11 @@ import appeng.container.guisync.GuiSync;
 import appeng.container.slot.*;
 import appeng.helpers.IContainerCraftingPacket;
 import appeng.parts.reporting.PartPatternTerminalEx;
-import appeng.tile.inventory.AppEngInternalInventory;
-import appeng.tile.inventory.IAEAppEngInventory;
-import appeng.tile.inventory.InvOperation;
 import appeng.util.Platform;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -23,40 +19,41 @@ import net.minecraft.nbt.NBTTagList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerPatternTermEx extends ContainerMEMonitorable implements IAEAppEngInventory, IOptionalSlotHost, IContainerCraftingPacket {
+public class ContainerPatternTermEx extends ContainerMEMonitorable implements IOptionalSlotHost, IContainerCraftingPacket {
     private final PartPatternTerminalEx patternTerminal;
-    private final AppEngInternalInventory cOut = new AppEngInternalInventory( null, 1 );
-    private final IInventory crafting;
-    private final SlotFakeCraftingMatrix[] craftingSlots = new SlotFakeCraftingMatrix[16];
-    private final OptionalSlotFake[] outputSlots = new OptionalSlotFake[4];
+    private final OptionalSlotFake[] craftingSlots = new OptionalSlotFake[16];
+    private final OptionalSlotFake[] outputSlots = new OptionalSlotFake[16];
     private final SlotRestrictedInput patternSlotIN;
     private final SlotRestrictedInput patternSlotOUT;
-    @GuiSync( 96 + (17-9) )
+    @GuiSync( 96 + (17-9) + 12 )
     public boolean substitute = false;
-
+    @GuiSync( 96 + (17-9) + 16 )
+    public boolean inverted;
+    public boolean initialUpdatePassed = false;
     public ContainerPatternTermEx(final InventoryPlayer ip, final ITerminalHost monitorable )
     {
         super( ip, monitorable, false );
         this.patternTerminal = (PartPatternTerminalEx) monitorable;
-
+        inverted = patternTerminal.isInverted();
         final IInventory patternInv = this.getPatternTerminal().getInventoryByName( "pattern" );
         final IInventory output = this.getPatternTerminal().getInventoryByName( "output" );
-
-        this.crafting = this.getPatternTerminal().getInventoryByName( "crafting" );
+        final IInventory crafting = this.getPatternTerminal().getInventoryByName("crafting");
 
         for( int y = 0; y < 4; y++ )
         {
             for( int x = 0; x < 4; x++ )
             {
-                this.addSlotToContainer( this.craftingSlots[x + y * 4] = new SlotFakeCraftingMatrix( this.crafting, x + y * 4, 15 + x * 18, -83 + y * 18 ) );
+                this.addSlotToContainer( this.craftingSlots[x + y * 4] = new OptionalSlotFake(crafting, this, x + y * 4, 15, -83, x, y, x + 4 ) );
+                this.craftingSlots[x + y * 4].setRenderDisabled(false);
             }
         }
-
-        for( int y = 0; y < 4; y++ )
+        for( int x = 0; x < 4; x++ )
         {
-            this.addSlotToContainer( this.outputSlots[y] = new SlotPatternOutputs( output, this, y, 112, -83 + y * 18, 0, 0, 1 ) );
-            this.outputSlots[y].setRenderDisabled( false );
-            this.outputSlots[y].setIIcon( -1 );
+            for( int y = 0; y < 4; y++ )
+            {
+                this.addSlotToContainer( this.outputSlots[x*4 + y] = new OptionalSlotFake( output, this, x*4 + y, 112, -83, -x, y, x ) );
+                this.outputSlots[x*4 + y].setRenderDisabled(false);
+            }
         }
 
         this.addSlotToContainer( this.patternSlotIN = new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.BLANK_PATTERN, patternInv, 0, 147, -72 - 9, this.getInventoryPlayer() ) );
@@ -65,52 +62,6 @@ public class ContainerPatternTermEx extends ContainerMEMonitorable implements IA
         this.patternSlotOUT.setStackLimit( 1 );
 
         this.bindPlayerInventory( ip, 0, 0 );
-        this.updateOrderOfOutputSlots();
-    }
-
-    private void updateOrderOfOutputSlots()
-    {
-       for( int y = 0; y < 4; y++ )
-           this.outputSlots[y].xDisplayPosition = this.outputSlots[y].getX();
-    }
-
-    @Override
-    public void putStackInSlot( final int par1, final ItemStack par2ItemStack )
-    {
-        super.putStackInSlot( par1, par2ItemStack );
-        this.getAndUpdateOutput();
-    }
-
-    @Override
-    public void putStacksInSlots( final ItemStack[] par1ArrayOfItemStack )
-    {
-        super.putStacksInSlots( par1ArrayOfItemStack );
-        this.getAndUpdateOutput();
-    }
-
-    private void getAndUpdateOutput()
-    {
-        final InventoryCrafting ic = new InventoryCrafting( this, 4, 4 );
-
-        for( int x = 0; x < ic.getSizeInventory(); x++ )
-        {
-            ic.setInventorySlotContents( x, this.crafting.getStackInSlot( x ) );
-        }
-
-        final ItemStack is = CraftingManager.getInstance().findMatchingRecipe( ic, this.getPlayerInv().player.worldObj );
-        this.cOut.setInventorySlotContents( 0, is );
-    }
-
-    @Override
-    public void saveChanges()
-    {
-
-    }
-
-    @Override
-    public void onChangeInventory(final IInventory inv, final int slot, final InvOperation mc, final ItemStack removedStack, final ItemStack newStack )
-    {
-
     }
 
     public void encode()
@@ -199,7 +150,7 @@ public class ContainerPatternTermEx extends ContainerMEMonitorable implements IA
 
     private ItemStack[] getOutputs()
     {
-        final List<ItemStack> list = new ArrayList<>(4);
+        final List<ItemStack> list = new ArrayList<ItemStack>(16);
         boolean hasValue = false;
 
         for (final OptionalSlotFake outputSlot : this.outputSlots) {
@@ -248,17 +199,13 @@ public class ContainerPatternTermEx extends ContainerMEMonitorable implements IA
     @Override
     public boolean isSlotEnabled( final int idx )
     {
-        if( idx == 1 )
+        if (idx < 4) // outputs
         {
-            return true;
-        }
-        else if( idx == 2 )
-        {
-            return false;
+            return inverted || idx == 0;
         }
         else
         {
-            return false;
+            return !inverted || idx == 4;
         }
     }
 
@@ -268,7 +215,41 @@ public class ContainerPatternTermEx extends ContainerMEMonitorable implements IA
         super.detectAndSendChanges();
         if( Platform.isServer() )
         {
-            this.substitute = this.patternTerminal.isSubstitution();
+            substitute = patternTerminal.isSubstitution();
+            if (inverted != patternTerminal.isInverted()) {
+                inverted = patternTerminal.isInverted();
+                offsetSlots(!initialUpdatePassed);
+                initialUpdatePassed = true;
+            }
+        }
+    }
+
+    private void offsetSlots(boolean initial) {
+        int offset = inverted ? 9000 : - 9000;
+        if (!initial || inverted) {
+            for (int y = 0; y < 4; y++) {
+                for (int x = 1; x < 4; x++) {
+                    craftingSlots[x + y * 4].xDisplayPosition -= offset;
+                }
+            }
+        }
+        if (!initial || !inverted) {
+            for (int x = 1; x < 4; x++) {
+                for (int y = 0; y < 4; y++) {
+                    outputSlots[x * 4 + y].xDisplayPosition += offset;
+                }
+            }
+        }
+    }
+    @Override
+    public void onUpdate( final String field, final Object oldValue, final Object newValue )
+    {
+        super.onUpdate( field, oldValue, newValue );
+
+        if( field.equals( "inverted" ) )
+        {
+            offsetSlots(!initialUpdatePassed);
+            initialUpdatePassed = true;
         }
     }
 
@@ -308,7 +289,6 @@ public class ContainerPatternTermEx extends ContainerMEMonitorable implements IA
         }
 
         this.detectAndSendChanges();
-        this.getAndUpdateOutput();
     }
 
     @Override

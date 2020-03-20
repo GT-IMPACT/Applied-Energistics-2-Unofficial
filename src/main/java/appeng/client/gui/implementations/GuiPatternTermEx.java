@@ -2,6 +2,7 @@ package appeng.client.gui.implementations;
 
 import appeng.api.config.ActionItems;
 import appeng.api.config.ItemSubstitution;
+import appeng.api.config.PatternSlotConfig;
 import appeng.api.config.Settings;
 import appeng.api.storage.ITerminalHost;
 import appeng.client.gui.widgets.GuiImgButton;
@@ -25,6 +26,8 @@ public class GuiPatternTermEx extends GuiMEMonitorable {
     private GuiImgButton substitutionsDisabledBtn;
     private GuiImgButton encodeBtn;
     private GuiImgButton clearBtn;
+    private GuiImgButton invertBtn;
+    private boolean containerSynchronized = false;
 
     public GuiPatternTermEx(final InventoryPlayer inventoryPlayer, final ITerminalHost te )
     {
@@ -48,6 +51,12 @@ public class GuiPatternTermEx extends GuiMEMonitorable {
             if( this.clearBtn == btn )
             {
                 NetworkHandler.instance.sendToServer( new PacketValueConfig( "PatternTerminalEx.Clear", "1" ) );
+            }
+
+            if( this.invertBtn == btn )
+            {
+                NetworkHandler.instance.sendToServer( new PacketValueConfig( "PatternTerminalEx.Invert", container.inverted ? "0" : "1") );
+                updateButtons(!container.inverted);
             }
 
             if( this.substitutionsEnabledBtn == btn || this.substitutionsDisabledBtn == btn )
@@ -81,6 +90,20 @@ public class GuiPatternTermEx extends GuiMEMonitorable {
 
         this.encodeBtn = new GuiImgButton( this.guiLeft + 147, this.guiTop + this.ySize - 142, Settings.ACTIONS, ActionItems.ENCODE );
         this.buttonList.add( this.encodeBtn );
+
+        invertBtn = new GuiImgButton( this.guiLeft + 87, this.guiTop + this.ySize - 155, Settings.ACTIONS,
+                container.inverted ? PatternSlotConfig.C_4_16 : PatternSlotConfig.C_16_4);
+        invertBtn.setHalfSize( true );
+        this.buttonList.add( this.invertBtn );
+
+    }
+
+    private void updateButtons(boolean val) {
+        int offset = val ? ((-18) * 3) : (18 * 3);
+        substitutionsEnabledBtn.xPosition += offset;
+        substitutionsDisabledBtn.xPosition += offset;
+        clearBtn.xPosition += offset;
+        invertBtn.xPosition += offset;
     }
 
     @Override
@@ -96,7 +119,12 @@ public class GuiPatternTermEx extends GuiMEMonitorable {
             this.substitutionsEnabledBtn.visible = false;
             this.substitutionsDisabledBtn.visible = true;
         }
-
+        if (!containerSynchronized)
+        {
+            containerSynchronized = true;
+            if (container.inverted)
+                updateButtons(true);
+        }
         super.drawFG( offsetX, offsetY, mouseX, mouseY );
         this.fontRendererObj.drawString( GuiText.PatternTerminalEx.getLocal(), 8, this.ySize - 96 + 2 - this.getReservedSpace(), 4210752 );
     }
@@ -104,7 +132,7 @@ public class GuiPatternTermEx extends GuiMEMonitorable {
     @Override
     protected String getBackground()
     {
-        return "guis/pattern3.png";
+        return container.inverted ? "guis/pattern4.png" : "guis/pattern3.png";
     }
 
     @Override

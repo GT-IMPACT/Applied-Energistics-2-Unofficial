@@ -21,10 +21,11 @@ public class PartPatternTerminalEx extends AbstractPartTerminal {
     private static final CableBusTextures FRONT_COLORED_ICON = CableBusTextures.PartPatternTerm_Colored;
 
     private final AppEngInternalInventory crafting = new AppEngInternalInventory( this, 16 );
-    private final AppEngInternalInventory output = new AppEngInternalInventory( this, 4 );
+    private final AppEngInternalInventory output = new AppEngInternalInventory( this, 16 );
     private final AppEngInternalInventory pattern = new AppEngInternalInventory( this, 2 );
 
     private boolean substitute = false;
+    private boolean inverted = false;
 
     @Reflected
     public PartPatternTerminalEx( final ItemStack is )
@@ -52,6 +53,7 @@ public class PartPatternTerminalEx extends AbstractPartTerminal {
         this.pattern.readFromNBT( data, "pattern" );
         this.output.readFromNBT( data, "outputList" );
         this.crafting.readFromNBT( data, "craftingGrid" );
+        inverted = data.getBoolean( "inverted" );
     }
 
     @Override
@@ -62,6 +64,7 @@ public class PartPatternTerminalEx extends AbstractPartTerminal {
         this.pattern.writeToNBT( data, "pattern" );
         this.output.writeToNBT( data, "outputList" );
         this.crafting.writeToNBT( data, "craftingGrid" );
+        data.setBoolean("inverted", inverted);
     }
 
     @Override
@@ -162,5 +165,13 @@ public class PartPatternTerminalEx extends AbstractPartTerminal {
     public CableBusTextures getFrontDark()
     {
         return FRONT_DARK_ICON;
+    }
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
     }
 }
