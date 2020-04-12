@@ -99,7 +99,7 @@ public class BlockEnergyCell extends AEBaseTileBlock
 
 	public double getMaxPower()
 	{
-		return 200000.0;
+		return 20000000.0;
 	}
 
 	@Override

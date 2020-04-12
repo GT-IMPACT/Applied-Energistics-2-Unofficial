@@ -39,7 +39,7 @@ public class TileEnergyCell extends AENetworkTile implements IAEPowerStorage
 {
 
 	private double internalCurrentPower = 0.0;
-	private double internalMaxPower = 200000.0;
+	private double internalMaxPower = 20000000.0;
 
 	private byte currentMeta = -1;
 

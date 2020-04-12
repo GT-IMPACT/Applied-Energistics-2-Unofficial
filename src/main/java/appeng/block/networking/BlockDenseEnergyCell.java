@@ -64,6 +64,6 @@ public class BlockDenseEnergyCell extends BlockEnergyCell
 	@Override
 	public double getMaxPower()
 	{
-		return 200000.0 * 8.0;
+		return 20000000.0 * 8.0;
 	}
 }
