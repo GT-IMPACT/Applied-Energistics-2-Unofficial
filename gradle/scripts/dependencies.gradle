@@ -31,10 +31,10 @@ repositories {
         url "http://mobiusstrip.eu/maven"
     }
 
-    maven {
-        name "FireBall API Depot"
-        url "http://dl.tsr.me/artifactory/libs-release-local"
-    }
+//    maven {
+//        name "FireBall API Depot"
+//        url "http://dl.tsr.me/artifactory/libs-release-local"
+//    }
 
     maven {
         name = "Player"
@@ -46,10 +46,10 @@ repositories {
         url = "http://maven.tterrag.com/"
     }
 
-    maven  {
-        name = "RX14 Proxy"
-        url = "http://mvn.rx14.co.uk/repo/"
-    }
+//    maven  {
+//        name = "RX14 Proxy"
+//        url = "http://mvn.rx14.co.uk/repo/"
+//    }
 
     maven {
         name "OpenComputers Repo"
@@ -66,6 +66,19 @@ repositories {
         artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
     }
 
+    maven { // GalacticGreg, YAMCore,..
+        name 'UsrvDE'
+        url "http://jenkins.usrv.eu:8081/nexus/content/repositories/releases/"
+    }
+	ivy {
+        name 'gtnh_download_source_stupid_underscore_typo'
+        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]_[revision].[ext]"
+    }
+
+	ivy {
+        name 'gtnh_download_source'
+        artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]"
+    }
 //  CurseForge DNS for TE is not available or I am just being unlucky, code part can stay since this is applicable to any other curseforge mod though
 //    ivy {
 //        name = "CoFHLib"
@@ -125,17 +138,19 @@ dependencies {
 
     // self compiled APIs
     compile "appeng:Waila:${waila_version}_${minecraft_version}:api"
-    compile "appeng:RotaryCraft:${rotarycraft_version}:api"
-    compile "appeng:mekanism:${minecraft_version}-${mekansim_version}:api"
-    compile "appeng:InventoryTweaks:${invtweaks_version}:api"
+//    compile "appeng:RotaryCraft:${rotarycraft_version}:api"
+//    compile "appeng:mekanism:${minecraft_version}-${mekansim_version}:api"
+    compile files("lib/InventoryTweaks-deobf-1.58-147.jar")
+//    compile "appeng:InventoryTweaks:${invtweaks_version}:api"
 
     // self compiled stubs
-    compile(group: 'api', name: 'coloredlightscore', version: "${api_coloredlightscore_version}")
-    compile(group: 'api', name: 'craftguide', version: "${api_craftguide_version}")
+//    compile(group: 'api', name: 'coloredlightscore', version: "${api_coloredlightscore_version}")
+//    compile(group: 'api', name: 'craftguide', version: "${api_craftguide_version}")
     compile(group: 'api', name: 'immibis', version: "${api_immibis_version}")
-    compile(group: 'api', name: 'mfr', version: "${api_mfr_version}")
+//    compile(group: 'api', name: 'mfr', version: "${api_mfr_version}")
+	compile files("lib/MineFactoryReloaded-[1.7.10]2.8.1-174-dev.jar" )
     compile(group: 'api', name: 'railcraft', version: "${api_railcraft_version}")
-    compile(group: 'api', name: 'rf', version: "${api_rf_version}")
+//    compile(group: 'api', name: 'rf', version: "${api_rf_version}")
 
     testCompile "junit:junit:4.12"
 }
