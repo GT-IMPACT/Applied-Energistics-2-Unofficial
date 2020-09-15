@@ -43,6 +43,7 @@ import appeng.tile.inventory.AppEngInternalAEInventory;
 import appeng.util.Platform;
 import appeng.util.SettingsFrom;
 import com.google.common.base.Preconditions;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -67,6 +68,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+
+import static gregtech.api.enums.ItemList.Tool_NoteBook;
 
 
 public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, IUpgradeableHost, ICustomNameObject
@@ -498,11 +501,13 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	private boolean useRenamer( final EntityPlayer player )
 	{
 		final ItemStack is = player.inventory.getCurrentItem();
-		if( is != null && is.getItem() instanceof ToolQuartzCuttingKnife) {
-			if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
-				return false;
-			Platform.openGUI( player, tile, side, GuiBridge.GUI_RENAMER );
-			return true;
+		if (Loader.isModLoaded("gregtech")) {
+			if (is != null && is.getItem().equals(Tool_NoteBook.getItem())) {
+				if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
+					return false;
+				Platform.openGUI(player, tile, side, GuiBridge.GUI_RENAMER);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -531,10 +536,8 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		if( event.isCanceled() )
 			return false;
 
-		if( this.useMemoryCard( player ) )
-		{
+		if (this.useMemoryCard( player ) || useRenamer(player))
 			return true;
-		}
 
 		return this.onPartShiftActivate( player, pos );
 	}

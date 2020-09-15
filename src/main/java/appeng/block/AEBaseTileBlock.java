@@ -38,7 +38,10 @@ import appeng.util.Platform;
 import appeng.util.SettingsFrom;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import gregtech.api.enums.ItemList;
+import gregtech.common.items.behaviors.Behaviour_NoteBook;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -61,6 +64,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+
+import static gregtech.api.enums.ItemList.Tool_NoteBook;
 
 
 public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature, ITileEntityProvider
@@ -329,15 +334,16 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature,
 						return false;
 					}
 				}
-				if( is.getItem() instanceof ToolQuartzCuttingKnife && !( this instanceof BlockCableBus ) )
-				{
-					if( ForgeEventFactory.onItemUseStart( player, is, 1 ) <= 0 )
-						return false;
-					final AEBaseTile tile = this.getTileEntity( w, x, y, z );
-					if( tile == null )
-						return false;
-					Platform.openGUI( player, tile, ForgeDirection.getOrientation( side ), GuiBridge.GUI_RENAMER );
-					return true;
+				if (Loader.isModLoaded("gregtech")) {
+					if (is.getItem().equals(Tool_NoteBook.getItem()) && !(this instanceof BlockCableBus)) {
+						if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
+							return false;
+						final AEBaseTile tile = this.getTileEntity(w, x, y, z);
+						if (tile == null)
+							return false;
+						Platform.openGUI(player, tile, ForgeDirection.getOrientation(side), GuiBridge.GUI_RENAMER);
+						return true;
+					}
 				}
 			}
 		}
