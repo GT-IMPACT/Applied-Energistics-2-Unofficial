@@ -36,6 +36,8 @@ repositories {
 //        url "http://dl.tsr.me/artifactory/libs-release-local"
 //    }
 
+
+
     maven {
         name = "Player"
         url = "http://maven.ic2.player.to/"
@@ -46,10 +48,10 @@ repositories {
         url = "http://maven.tterrag.com/"
     }
 
-//    maven  {
-//        name = "RX14 Proxy"
-//        url = "http://mvn.rx14.co.uk/repo/"
-//    }
+    maven {
+        name = "gt"
+        url = "https://gregtech.overminddl1.com/"
+    }
 
     maven {
         name "OpenComputers Repo"
@@ -151,6 +153,7 @@ dependencies {
 	compile files("lib/MineFactoryReloaded-[1.7.10]2.8.1-174-dev.jar" )
     compile(group: 'api', name: 'railcraft', version: "${api_railcraft_version}")
 //    compile(group: 'api', name: 'rf', version: "${api_rf_version}")
+    compileOnly "com.gregoriust.gregtech:gregtech:${gt_version}:dev"
 
     testCompile "junit:junit:4.12"
 }
