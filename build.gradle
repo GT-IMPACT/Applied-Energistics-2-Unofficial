@@ -48,7 +48,7 @@ buildscript {
 sourceCompatibility = JavaVersion.VERSION_1_6
 targetCompatibility = JavaVersion.VERSION_1_6
 
-version = aeversion + "-" + aechannel + "-" + aebuild
+version = aeversion + "-" + aebuild + "-impact"
 group = aegroup
 archivesBaseName = aebasename
 

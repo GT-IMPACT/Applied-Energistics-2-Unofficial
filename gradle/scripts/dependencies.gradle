@@ -80,10 +80,6 @@ repositories {
         artifactPattern "http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]"
     }
 
-		maven {
-			name = "gt"
-			url = "https://gregtech.overminddl1.com/"
-		}
 //  CurseForge DNS for TE is not available or I am just being unlucky, code part can stay since this is applicable to any other curseforge mod though
 //    ivy {
 //        name = "CoFHLib"
@@ -108,6 +104,7 @@ repositories {
 
 configurations {
     mods
+
 }
 
 dependencies {
@@ -132,15 +129,14 @@ dependencies {
     compileOnly "codechicken:CodeChickenLib:${minecraft_version}-${code_chicken_lib_version}:dev"
     compileOnly "codechicken:CodeChickenCore:${minecraft_version}-${code_chicken_core_version}:dev"
     compileOnly "codechicken:NotEnoughItems:${minecraft_version}-${nei_version}:dev"
-    compileOnly "com.gregoriust.gregtech:gregtech:${gt_version}:dev"
 
     compile files("lib/buildcraft-${bc_version}-dev.jar")
     compile files("lib/PneumaticCraft-${minecraft_version}-${pneumaticcraft_version}-api.jar")
 
     // provided APIs
     compile files("lib/OpenComputers-MC${minecraft_version}-${opencomputers_version}-api.jar")
-    compile files("lib/industrialcraft-2-${ic2_version}-experimental-api.jar")
     compile files("lib/BetterStorage-${minecraft_version}-${betterstorage_version}-api.jar")
+    compile fileTree(dir: 'lib', include: '*.jar')
 
     // self compiled APIs
     compile "appeng:Waila:${waila_version}_${minecraft_version}:api"
