@@ -57,7 +57,7 @@ public enum PartType
 				}
 			},
 
-	CableSmart( 40, EnumSet.of( AEFeature.Channels ), EnumSet.noneOf( IntegrationType.class ), PartCableSmart.class )
+	CableSmart( 40, EnumSet.of( AEFeature.Core ), EnumSet.noneOf( IntegrationType.class ), PartCableSmart.class )
 			{
 				@Override
 				public boolean isCable()
@@ -66,7 +66,7 @@ public enum PartType
 				}
 			},
 
-	CableDense( 60, EnumSet.of( AEFeature.Channels ), EnumSet.noneOf( IntegrationType.class ), PartDenseCable.class )
+	CableDense( 60, EnumSet.of( AEFeature.Core ), EnumSet.noneOf( IntegrationType.class ), PartDenseCable.class )
 			{
 				@Override
 				public boolean isCable()
