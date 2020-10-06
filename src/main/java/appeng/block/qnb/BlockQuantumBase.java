@@ -76,4 +76,5 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 		return new RenderQNB();
 	}
 
+
 }

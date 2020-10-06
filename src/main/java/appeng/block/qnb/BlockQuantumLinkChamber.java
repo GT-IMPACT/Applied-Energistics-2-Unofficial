@@ -19,6 +19,8 @@
 package appeng.block.qnb;
 
 
+import appeng.block.AEBaseItemBlock;
+import appeng.block.AEBaseItemBlockQuantumBase;
 import appeng.client.EffectType;
 import appeng.core.CommonHelper;
 import appeng.core.sync.GuiBridge;
@@ -95,5 +97,11 @@ public class BlockQuantumLinkChamber extends BlockQuantumBase
 	{
 		final double onePixel = 2.0 / 16.0;
 		out.add( AxisAlignedBB.getBoundingBox( onePixel, onePixel, onePixel, 1.0 - onePixel, 1.0 - onePixel, 1.0 - onePixel ) );
+	}
+
+	@Override
+	public Class<? extends AEBaseItemBlock> getItemBlockClass()
+	{
+		return AEBaseItemBlockQuantumBase.class;
 	}
 }
