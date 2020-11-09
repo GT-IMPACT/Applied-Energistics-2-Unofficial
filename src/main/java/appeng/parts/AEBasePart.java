@@ -46,6 +46,8 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.ItemList;
+import gregtech.api.util.GT_ModHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.crash.CrashReportCategory;
@@ -70,6 +72,7 @@ import java.util.List;
 import java.util.Random;
 
 import static gregtech.api.enums.ItemList.Tool_NoteBook;
+import static gregtech.api.util.GT_ModHandler.isElectricItem;
 
 
 public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, IUpgradeableHost, ICustomNameObject
@@ -502,9 +505,9 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	{
 		final ItemStack is = player.inventory.getCurrentItem();
 		if (Loader.isModLoaded("gregtech")) {
-			if (is != null && is.getItem().equals(Tool_NoteBook.getItem())) {
-				if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
-					return false;
+			if (isElectricItem(is) && ItemList.Tool_NoteBook.getItem() == is.getItem()) {
+				if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0) return false;
+				GT_ModHandler.damageOrDechargeItem(is, 1, 100, player);
 				Platform.openGUI(player, tile, side, GuiBridge.GUI_RENAMER);
 				return true;
 			}
