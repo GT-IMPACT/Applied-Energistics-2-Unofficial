@@ -195,6 +195,7 @@ public class ToolMassCannon extends AEBasePoweredItem implements IStorageCell
 				}
 			}
 		}
+		chargeFromArmor(item, p);
 		return item;
 	}
 

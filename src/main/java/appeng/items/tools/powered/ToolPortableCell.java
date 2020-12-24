@@ -66,6 +66,7 @@ public class ToolPortableCell extends AEBasePoweredItem implements IStorageCell,
 	public ItemStack onItemRightClick( final ItemStack item, final World w, final EntityPlayer player )
 	{
 		Platform.openGUI( player, null, ForgeDirection.UNKNOWN, GuiBridge.GUI_PORTABLE_CELL );
+		chargeFromArmor(item, player);
 		return item;
 	}
 

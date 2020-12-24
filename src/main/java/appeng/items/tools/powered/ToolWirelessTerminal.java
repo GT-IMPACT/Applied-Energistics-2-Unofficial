@@ -61,6 +61,7 @@ public class ToolWirelessTerminal extends AEBasePoweredItem implements IWireless
 	{
 		if( ForgeEventFactory.onItemUseStart( player, item, 1 ) > 0 )
 			AEApi.instance().registries().wireless().openWirelessTerminalGui( item, w, player );
+		chargeFromArmor(item, player);
 		return item;
 	}
 
