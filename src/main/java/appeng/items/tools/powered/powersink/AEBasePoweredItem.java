@@ -56,8 +56,8 @@ public abstract class AEBasePoweredItem extends RedstoneFlux
 				int cur = chargable.getEnergyStored(aStack);
 				if (cur < max) {
 
-					double canUse = Math.max(max - cur, 0);
-					if (canUse > this.getAEMaxPower(aStack)) canUse = this.getAEMaxPower(aStack) - cur;
+					int canUse = Math.max(max - cur, 0);
+					if (canUse > this.getAEMaxPower(aStack)) canUse = (int) this.getAEMaxPower(aStack) - cur;
 
 					double tCharge = ElectricItem.manager.discharge(tArmor, (canUse / 2D), Integer.MAX_VALUE, true, true, false);
 					if (tCharge > 0)
