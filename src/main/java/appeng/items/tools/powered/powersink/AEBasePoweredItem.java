@@ -19,13 +19,7 @@
 package appeng.items.tools.powered.powersink;
 
 
-import cofh.api.energy.IEnergyContainerItem;
 import com.google.common.base.Optional;
-import ic2.api.item.ElectricItem;
-import ic2.api.item.IElectricItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 
 public abstract class AEBasePoweredItem extends RedstoneFlux
@@ -39,7 +33,7 @@ public abstract class AEBasePoweredItem extends RedstoneFlux
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
-		chargeFromArmor(stack, player);
+		//chargeFromArmor(stack, player);
 		return super.onItemRightClick(stack, w, player);
 	}
 

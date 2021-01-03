@@ -211,7 +211,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 				}
 			}
 		}
-		chargeFromArmor(item, p);
+
 		return item;
 	}
 
