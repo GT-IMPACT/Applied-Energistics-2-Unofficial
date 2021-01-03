@@ -120,15 +120,15 @@ public abstract class PartSharedItemBus extends PartUpgradeable implements IGrid
 		{
 			default:
 			case 0:
-				return 1;
-			case 1:
 				return 8;
-			case 2:
+			case 1:
 				return 32;
+			case 2:
+				return 128;
 			case 3:
-				return 64;
+				return 512;
 			case 4:
-				return 96;
+				return 2048;
 		}
 	}
 
