@@ -20,6 +20,7 @@ package appeng.tile.qnb;
 
 
 import appeng.api.AEApi;
+import appeng.api.config.PowerMultiplier;
 import appeng.api.definitions.IBlockDefinition;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.events.MENetworkEventSubscribe;
@@ -67,7 +68,7 @@ public class TileQuantumBridge extends AENetworkInvTile implements IAEMultiBlock
 	{
 		this.getProxy().setValidSides( EnumSet.noneOf( ForgeDirection.class ) );
 		this.getProxy().setFlags( GridFlags.DENSE_CAPACITY );
-		this.getProxy().setIdlePowerUsage( 910.2D );
+		this.getProxy().setIdlePowerUsage( (int) (8192D / 36D) );
 		this.internalInventory.setMaxStackSize( 1 );
 	}
 
