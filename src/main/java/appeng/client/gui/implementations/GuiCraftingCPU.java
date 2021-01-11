@@ -41,14 +41,12 @@ import com.google.common.base.Joiner;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -222,6 +220,11 @@ public class GuiCraftingCPU extends AEBaseGui implements ISortSource
 				GL11.glPushMatrix();
 				GL11.glScaled( 0.5, 0.5, 0.5 );
 
+				@SuppressWarnings( "rawtypes" )
+				final List stre = refStack.copy().getItemStack().getTooltip( mc.thePlayer, this.mc.gameSettings.advancedItemTooltips );
+				final String[] a = new String[ stre.size() ];
+				String[] dspToolTip2 = ( String[] ) stre.toArray( a );
+
 				final IAEItemStack stored = this.storage.findPrecise( refStack );
 				final IAEItemStack activeStack = this.active.findPrecise( refStack );
 				final IAEItemStack pendingStack = this.pending.findPrecise( refStack );
@@ -264,7 +267,8 @@ public class GuiCraftingCPU extends AEBaseGui implements ISortSource
 
 					if( this.tooltip == z - viewStart )
 					{
-						lineList.add( GuiText.Stored.getLocal() + ": " + Long.toString( stored.getStackSize() ) );
+						lineList.add( EnumChatFormatting.YELLOW + GuiText.Stored.getLocal() + ": " + Long.toString( stored.getStackSize() ) );
+						lineList.addAll( Arrays.asList( dspToolTip2 ) );
 					}
 
 					downY += 5;
@@ -279,7 +283,8 @@ public class GuiCraftingCPU extends AEBaseGui implements ISortSource
 
 					if( this.tooltip == z - viewStart )
 					{
-						lineList.add( GuiText.Crafting.getLocal() + ": " + Long.toString( activeStack.getStackSize() ) );
+						lineList.add( EnumChatFormatting.GREEN + GuiText.Crafting.getLocal() + ": " + Long.toString( activeStack.getStackSize() ) );
+						lineList.addAll( Arrays.asList( dspToolTip2 ) );
 					}
 
 					downY += 5;
@@ -294,7 +299,8 @@ public class GuiCraftingCPU extends AEBaseGui implements ISortSource
 
 					if( this.tooltip == z - viewStart )
 					{
-						lineList.add( GuiText.Scheduled.getLocal() + ": " + Long.toString( pendingStack.getStackSize() ) );
+						lineList.add( EnumChatFormatting.RED + GuiText.Scheduled.getLocal() + ": " + Long.toString( pendingStack.getStackSize() ) );
+						lineList.addAll( Arrays.asList( dspToolTip2 ) );
 					}
 				}
 
