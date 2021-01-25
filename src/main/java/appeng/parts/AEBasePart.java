@@ -504,13 +504,11 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	private boolean useRenamer( final EntityPlayer player )
 	{
 		final ItemStack is = player.inventory.getCurrentItem();
-		if (Loader.isModLoaded("gregtech")) {
-			if (isElectricItem(is) && ItemList.Tool_NoteBook.getItem() == is.getItem()) {
-				if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0) return false;
-				GT_ModHandler.damageOrDechargeItem(is, 1, 100, player);
-				Platform.openGUI(player, tile, side, GuiBridge.GUI_RENAMER);
-				return true;
-			}
+		if( is != null && is.getItem() instanceof ToolQuartzCuttingKnife) {
+			if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
+				return false;
+			Platform.openGUI( player, tile, side, GuiBridge.GUI_RENAMER );
+			return true;
 		}
 		return false;
 	}

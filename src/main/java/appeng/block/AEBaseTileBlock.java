@@ -336,17 +336,15 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature,
 						return false;
 					}
 				}
-				if (Loader.isModLoaded("gregtech")) {
-					if (isElectricItem(is) && ItemList.Tool_NoteBook.getItem() == is.getItem() && !(this instanceof BlockCableBus)) {
-						if (ForgeEventFactory.onItemUseStart(player, is, 1) <= 0)
-							return false;
-						final AEBaseTile tile = this.getTileEntity(w, x, y, z);
-						if (tile == null)
-							return false;
-						GT_ModHandler.damageOrDechargeItem(is, 1, 100, player);
-						Platform.openGUI(player, tile, ForgeDirection.getOrientation(side), GuiBridge.GUI_RENAMER);
-						return true;
-					}
+				if( is.getItem() instanceof ToolQuartzCuttingKnife && !( this instanceof BlockCableBus ) )
+				{
+					if( ForgeEventFactory.onItemUseStart( player, is, 1 ) <= 0 )
+						return false;
+					final AEBaseTile tile = this.getTileEntity( w, x, y, z );
+					if( tile == null )
+						return false;
+					Platform.openGUI( player, tile, ForgeDirection.getOrientation( side ), GuiBridge.GUI_RENAMER );
+					return true;
 				}
 			}
 		}

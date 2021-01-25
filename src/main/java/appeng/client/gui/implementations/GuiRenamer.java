@@ -46,7 +46,7 @@ public class GuiRenamer  extends AEBaseGui {
         if (key == 28) // Enter
         {
             try {
-                NetworkHandler.instance.sendToServer(new PacketValueConfig("Packet.ReName", this.name.getText()));
+                NetworkHandler.instance.sendToServer(new PacketValueConfig("QuartzKnife.ReName", this.name.getText()));
             } catch (IOException e) {
                 AELog.debug(e);
             }
