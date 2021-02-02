@@ -17,8 +17,9 @@
  */
 
 package appeng.items.tools.powered.powersink;
-
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import com.google.common.base.Optional;
 
 
@@ -35,29 +36,5 @@ public abstract class AEBasePoweredItem extends RedstoneFlux
 	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
 		//chargeFromArmor(stack, player);
 		return super.onItemRightClick(stack, w, player);
-	}
-
-	public void chargeFromArmor(ItemStack aStack, EntityPlayer aPlayer) {
-
-		ItemStack tArmor = aPlayer.getCurrentArmor(2);
-		if (tArmor != null && tArmor.getItem() instanceof IElectricItem) {
-
-			IElectricItem tArmorItem = (IElectricItem) tArmor.getItem();
-			if (tArmorItem.canProvideEnergy(tArmor)) {
-
-				IEnergyContainerItem chargable = (IEnergyContainerItem) aStack.getItem();
-				int max = chargable.getMaxEnergyStored(aStack);
-				int cur = chargable.getEnergyStored(aStack);
-				if (cur < max) {
-
-					int canUse = Math.max(max - cur, 0);
-					if (canUse > this.getAEMaxPower(aStack)) canUse = (int) this.getAEMaxPower(aStack) - cur;
-
-					double tCharge = ElectricItem.manager.discharge(tArmor, (canUse / 2D), Integer.MAX_VALUE, true, true, false);
-					if (tCharge > 0)
-						this.injectAEPower(aStack, tCharge * 2D);
-				}
-			}
-		}
 	}
 }
