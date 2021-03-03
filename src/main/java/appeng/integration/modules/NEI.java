@@ -77,9 +77,9 @@ public class NEI implements INEI, IContainerTooltipHandler, IIntegrationModule
 
 		this.registerRecipeHandler( new NEIAEShapedRecipeHandler() );
 		this.registerRecipeHandler( new NEIAEShapelessRecipeHandler() );
-		this.registerRecipeHandler( new NEIInscriberRecipeHandler() );
+		//this.registerRecipeHandler( new NEIInscriberRecipeHandler() );
 		this.registerRecipeHandler( new NEIWorldCraftingHandler() );
-		this.registerRecipeHandler( new NEIGrinderRecipeHandler() );
+		//this.registerRecipeHandler( new NEIGrinderRecipeHandler() );
 
 		if( AEConfig.instance.isFeatureEnabled( AEFeature.Facades ) && AEConfig.instance.isFeatureEnabled( AEFeature.EnableFacadeCrafting ) )
 		{
